@@ -8,7 +8,7 @@ const app = express();
 // CORS configuration
 app.use(cors({
   origin: '*',  // Allow requests from all origins
-  methods: ['GET', 'POST'],         // Allow these HTTP methods
+  methods: ['GET', 'POST','PUT','DELETE'],         // Allow these HTTP methods
   allowedHeaders: ['Content-Type'], // Allow these headers
 }));
 
@@ -40,7 +40,7 @@ app.use((err, req, res, next) => {
 });
 
 // Start server
-const port = 4000;
+const port = 4003;
 app.listen(port, () => {
   console.log(`Server started on port ${port}`);
 });
