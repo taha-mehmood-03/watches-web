@@ -29,6 +29,7 @@
     "express": "^4.19.2",
     "framer-motion": "^11.11.17",
     "hbs": "^4.2.0",
+    "http2": "^3.3.7",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.460.0",
     "mongodb": "^6.7.0",
