@@ -4,7 +4,6 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const webpack = require('webpack');  // Import webpack to use ProvidePlugin
 
 module.exports = {
   mode: 'production',
@@ -98,20 +97,11 @@ module.exports = {
       filename: 'css/[name].[contenthash].css',
       chunkFilename: 'css/[id].[contenthash].css',
     }),
-    // Provide polyfill for process
-    new webpack.ProvidePlugin({
-      process: 'process/browser',  // Polyfill the process object in the browser
-    }),
   ],
   resolve: {
     extensions: ['.js', '.jsx', '.json'],
     alias: {
       '@': path.resolve(__dirname, 'src'),
-    },
-    fallback: {
-      process: require.resolve('process/browser'),  // Polyfill process module
-      fs: false,  // Disable fs module in the browser
-      path: require.resolve('path-browserify'), // If you need path module in the browser
     },
   },
 };
