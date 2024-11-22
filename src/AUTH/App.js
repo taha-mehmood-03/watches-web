@@ -42,20 +42,44 @@ if (!mongoURI) {
   process.exit(1);
 }
 
-// CORS configurationarshias91
+// Enhanced CORS configuration with dynamic origin handling and logging
 const corsOptions = {
-  origin: process.env.NODE_ENV === "production"
-    ? process.env.REACT_APP_API_BASE_URL
-    : "http://localhost:3000", // Change this to your frontend development URL
+  origin: (origin, callback) => {
+    const allowedOrigin = process.env.NODE_ENV === "production"
+      ? process.env.REACT_APP_API_BASE_URL
+      : "http://localhost:3000"; // Replace with your frontend development URL
+    
+    console.log("Incoming Origin:", origin);
+    console.log("Allowed Origin:", allowedOrigin);
+
+    if (origin === allowedOrigin || !origin) {
+      console.log("CORS: Origin allowed");
+      callback(null, true); // Allow the request
+    } else {
+      console.error("CORS: Origin not allowed");
+      callback(new Error("Not allowed by CORS")); // Reject the request
+    }
+  },
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type"],
   credentials: true, // Enable credentials for cookies or Authorization headers
 };
 
+// Middleware to log incoming requests
+app.use((req, res, next) => {
+  console.log("Incoming Request:", {
+    method: req.method,
+    path: req.path,
+    origin: req.headers.origin,
+  });
+  next();
+});
+
 app.use(cors(corsOptions)); // Apply CORS middleware
 app.use(express.json()); // Enable parsing JSON requests
 app.use('/api', auth);
 
+// MongoDB connection
 mongoose
   .connect(mongoURI, {
     useNewUrlParser: true,
@@ -69,6 +93,7 @@ mongoose
     console.error("Error connecting to MongoDB:", err);
   });
 
+// Global error handler
 app.use((err, req, res, next) => {
   console.error('Error:', err);
   res.status(500).json({
