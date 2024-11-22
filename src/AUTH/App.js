@@ -46,7 +46,7 @@ if (!mongoURI) {
 const corsOptions = {
   origin: (origin, callback) => {
     const allowedOrigin = process.env.NODE_ENV === "production"
-      ? process.env.REACT_APP_API_BASE_URL
+      ? "https://watches-jo9ox120r-taha-mehmoods-projects-175bb778.vercel.app"
       : "http://localhost:3000"; // Replace with your frontend development URL
     
     console.log("Incoming Origin:", origin);
