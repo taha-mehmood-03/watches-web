@@ -1,0 +1,43 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "src/AUTH/Auth.js",
+        "use": "@vercel/node"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/(.*)",
+        "dest": "src/AUTH/Auth.js"
+      },
+      {
+        "src": "/(.*)",
+        "dest": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "/api/(.*)",
+        "headers": [
+          {
+            "key": "Access-Control-Allow-Origin",
+            "value": "https://watches-web-teal.vercel.app"
+          },
+          {
+            "key": "Access-Control-Allow-Methods",
+            "value": "GET, POST, PUT, DELETE, OPTIONS"
+          },
+          {
+            "key": "Access-Control-Allow-Headers",
+            "value": "X-Requested-With, Content-Type, Authorization"
+          },
+          {
+            "key": "Access-Control-Allow-Credentials",
+            "value": "true"
+          }
+        ]
+      }
+    ]
+  }
+  
