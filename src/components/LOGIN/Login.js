@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { Eye, EyeOff, Mail, Lock, AlertCircle } from "lucide-react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import axios from "axios";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -36,7 +37,7 @@ const Login = () => {
     const { email, password } = formData;
 
     try {
-      const response = await api.post("/login", { email, password });
+      const response = await axios.post("https://watches-jo9ox120r-taha-mehmoods-projects-175bb778.vercel.app/login", { email, password });
       const { userId, firstName, lastName, token, message } = response.data;
 
       // Store auth data
