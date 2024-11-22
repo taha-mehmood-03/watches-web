@@ -20,6 +20,7 @@ dotenv.config({ path: envPath });
 
 console.log(`Using environment file: ${envFile}`);
 console.log(`API Base URL: ${process.env.REACT_APP_API_BASE_URL}`);
+console.log(`API Base URL: ${process.env.REACT_APP_API_BASE_URL}`);
 
 // MongoDB URI
 const mongoURI = process.env.MONGO_URI;
