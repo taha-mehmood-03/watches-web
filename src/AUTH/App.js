@@ -48,7 +48,7 @@ const corsOptions = {
     ? process.env.REACT_APP_API_BASE_URL
     : "http://localhost:3000", // Change this to your frontend development URL
   methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
+  allowedHeaders: ["Content-Type"],
   credentials: true, // Enable credentials for cookies or Authorization headers
 };
 

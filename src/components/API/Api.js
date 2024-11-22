@@ -1,45 +1,23 @@
 import axios from 'axios';
 
-// Ensure environment variables are loaded
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL 
-  ? `${process.env.REACT_APP_API_BASE_URL}/api`
-  : 'http://localhost:4003/api';
-
-// Create axios instance
 const api = axios.create({
-  baseURL: API_BASE_URL,
-  timeout: 5000,
+  baseURL: `${process.env.REACT_APP_API_BASE_URL}/api`,  // Use the URL from .env file
+  timeout: 5000,  // Timeout
   headers: {
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json'
   }
 });
 
-// Log the full URL on every request
-api.interceptors.request.use(
-  (config) => {
-    // Log the full request URL
-    console.log('Request URL:', `${config.baseURL}${config.url}`);
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
-// Enhanced error interceptor
+// Add response interceptor for better error handling
 api.interceptors.response.use(
-  (response) => response,
-  (error) => {
-    const errorDetails = {
+  response => response,
+  error => {
+    console.error('API Error:', {
       message: error.message,
       response: error.response?.data,
       status: error.response?.status,
-      url: error.config?.url,
-    };
-
-    // Log error details
-    console.error('API Error:', errorDetails);
-
+      url: error.config?.url
+    });
     return Promise.reject(error);
   }
 );
