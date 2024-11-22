@@ -45,9 +45,10 @@ if (!mongoURI) {
 // Enhanced CORS configuration with dynamic origin handling and logging
 const corsOptions = {
   origin: (origin, callback) => {
-    const allowedOrigin = process.env.NODE_ENV === "production"
-      ? process.env.REACT_APP_API_BASE_URL
-      : "http://localhost:3000"; // Replace with your frontend development URL
+    const allowedOrigin = [
+       process.env.REACT_APP_API_BASE_URL,
+       "https://watches-qg3w25mlt-taha-mehmoods-projects-175bb778.vercel.app",
+       "http://localhost:3000"]// Replace with your frontend development URL
     
     console.log("Incoming Origin:", origin);
     console.log("Allowed Origin:", allowedOrigin);
@@ -75,7 +76,12 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cors(corsOptions)); // Apply CORS middleware
+app.use(cors({
+  origin: 'https://watches-qg3w25mlt-taha-mehmoods-projects-175bb778.vercel.app',
+  origin: "http://localhost:3000",
+  
+   // Specify your frontend's origin
+})); // Apply CORS middleware
 app.use(express.json()); // Enable parsing JSON requests
 app.use('/api', auth);
 
