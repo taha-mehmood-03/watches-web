@@ -31,13 +31,14 @@
       "NODE_ENV": "production",
       "DB_PASSWORD": "taha20416"
     },
-    "development": {
-      "MONGO_URI": "mongodb+srv://tahakhan:taha20416@cluster0.biepv.mongodb.net/WATCHESSTORE?retryWrites=true&w=majority&appName=Cluster0",
-      "REACT_APP_API_BASE_URL": "http://localhost:4003/api",
-      "JWT_SECRET": "d#&s8F$A5^yZ6tW*Rk@3pV!9nC7jG2mL4",
-      "PORT": "4003",
-      "NODE_ENV": "development",
-      "DB_PASSWORD": "taha20416"
-    }
+    "builds": [
+      {
+        "src": "src/package.json",
+        "use": "@vercel/static-build",
+        "config": {
+          "distDir": "build"
+        }
+      }
+    ]
   }
   
