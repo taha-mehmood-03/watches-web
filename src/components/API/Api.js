@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const api = axios.create({
   baseURL: process.env.NODE_ENV === 'production'
-    ? 'https://watches-jo9ox120r-taha-mehmoods-projects-175bb778.vercel.app/api'  // Production URL
+    ? `${process.env.REACT_APP_API_BASE_URL}`  // Production URL
     : 'http://localhost:4003/api',  // Local Development URL
   timeout: 5000,
   headers: {

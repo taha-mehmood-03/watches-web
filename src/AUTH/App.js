@@ -30,17 +30,10 @@ if (!mongoURI) {
 
 // Open-Origin CORS Configuration
 const corsOptions = {
-  origin: (origin, callback) => {
-    // Allow requests from any Vercel-deployed frontend
-    const allowedDomains = [/\.vercel\.app$/]; // Match any *.vercel.app domain
-    if (allowedDomains.some((pattern) => pattern.test(origin)) || !origin) {
-      callback(null, true); // Allow the request
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
+  origin: '*', // Allow all origins
   methods: ["GET", "POST", "PUT", "DELETE"],
-  credentials: true, // Allow cookies and Authorization headers
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: false, // Disable credentials for open-origin policy
 };
 
 // Apply CORS middleware
