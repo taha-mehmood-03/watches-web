@@ -57,7 +57,7 @@ app.use((req, res, next) => {
 
 // Enable JSON parsing
 app.use(express.json());
-
+app.use('/api', auth);
 // MongoDB connection
 mongoose
   .connect(mongoURI, {
