@@ -1,10 +1,14 @@
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
-const process = require('process');  // Polyfill for process
+const dotenv = require('dotenv');
+
+// Load environment variables
+dotenv.config();
 
 module.exports = {
   mode: 'production',
@@ -49,7 +53,7 @@ module.exports = {
           options: {
             presets: [
               '@babel/preset-env',
-              ['@babel/preset-react', { runtime: 'automatic' }]
+              ['@babel/preset-react', { runtime: 'automatic' }],
             ],
           },
         },
@@ -59,7 +63,7 @@ module.exports = {
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
-          'postcss-loader'
+          'postcss-loader',
         ],
       },
       {
@@ -72,7 +76,7 @@ module.exports = {
         ],
       },
       {
-        test: /\.(png|jpg|jpeg|gif|svg|webp|avif)$/i, // Added avif support here
+        test: /\.(png|jpg|jpeg|gif|svg|webp|avif)$/i,
         type: 'asset/resource',
         generator: {
           filename: 'images/[name].[hash][ext]',
@@ -98,15 +102,21 @@ module.exports = {
       filename: 'css/[name].[contenthash].css',
       chunkFilename: 'css/[id].[contenthash].css',
     }),
+    new webpack.DefinePlugin({
+      'process.env': JSON.stringify(process.env),
+    }),
   ],
   resolve: {
     extensions: ['.js', '.jsx', '.json'],
+    fallback: {
+      "process": require.resolve("process/browser")
+    },
     alias: {
       '@': path.resolve(__dirname, 'src'),
-      process: 'process/browser',  // Alias process to use the browser version
+      'process': 'process/browser',
     },
   },
   devServer: {
-    https: true, // Enable HTTPS
+    https: true,
   },
 };
