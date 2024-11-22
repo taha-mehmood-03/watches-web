@@ -73,7 +73,7 @@ mongoose
   });
 
 // Use your routes here
-app.use('/api', authRoutes);        // Auth routes
+app.use('/api/auth', authRoutes);        // Auth routes
 app.use('/api/watches', watchRoutes); // Watch routes
 app.use('/api/cart', cartRoutes);    // Cart routes
 app.use('/api/address', addressRoutes); // Address routes
