@@ -2,42 +2,42 @@
     "version": 2,
     "builds": [
       {
-        "src": "src/AUTH/Auth.js",
+        "src": "BACKEND/App.js",
         "use": "@vercel/node"
+      },
+      {
+        "src": "src/**/*.{js,jsx}",
+        "use": "@vercel/static-build",
+        "config": {
+          "distDir": "build"
+        }
       }
     ],
     "routes": [
       {
         "src": "/api/(.*)",
-        "dest": "src/AUTH/Auth.js"
+        "dest": "/BACKEND/App.js"
       },
       {
         "src": "/(.*)",
-        "dest": "/index.html"
+        "dest": "/src/$1"
       }
     ],
-    "headers": [
-      {
-        "source": "/api/(.*)",
-        "headers": [
-          {
-            "key": "Access-Control-Allow-Origin",
-            "value": "https://watches-web-teal.vercel.app"
-          },
-          {
-            "key": "Access-Control-Allow-Methods",
-            "value": "GET, POST, PUT, DELETE, OPTIONS"
-          },
-          {
-            "key": "Access-Control-Allow-Headers",
-            "value": "X-Requested-With, Content-Type, Authorization"
-          },
-          {
-            "key": "Access-Control-Allow-Credentials",
-            "value": "true"
-          }
-        ]
-      }
-    ]
+    "env": {
+      "MONGO_URI": "mongodb+srv://tahakhan:taha20416@cluster0.biepv.mongodb.net/WATCHESSTORE?retryWrites=true&w=majority&appName=Cluster0",
+      "REACT_APP_API_BASE_URL": "https://watches-web-teal.vercel.app/api",
+      "JWT_SECRET": "d#&s8F$A5^yZ6tW*Rk@3pV!9nC7jG2mL4",
+      "PORT": "80",
+      "NODE_ENV": "production",
+      "DB_PASSWORD": "taha20416"
+    },
+    "development": {
+      "MONGO_URI": "mongodb+srv://tahakhan:taha20416@cluster0.biepv.mongodb.net/WATCHESSTORE?retryWrites=true&w=majority&appName=Cluster0",
+      "REACT_APP_API_BASE_URL": "http://localhost:4003/api",
+      "JWT_SECRET": "d#&s8F$A5^yZ6tW*Rk@3pV!9nC7jG2mL4",
+      "PORT": "4003",
+      "NODE_ENV": "development",
+      "DB_PASSWORD": "taha20416"
+    }
   }
   
