@@ -3,70 +3,43 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const auth = require('./Auth');
-const app = express();
 const path = require('path');
+
+const app = express();
 
 // Ensure NODE_ENV is set
 if (!process.env.NODE_ENV) {
-  console.error("NODE_ENV is not set. Please specify either 'development' or 'production'.");
+  console.error("NODE_ENV is not set. Please specify 'development' or 'production'.");
   process.exit(1);
 }
 
 // Select the correct environment file based on NODE_ENV
 const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
-
-// Validate that envFile is a valid string
-if (typeof envFile !== 'string' || !envFile) {
-  console.error("Environment file name is invalid. Expected a string, but received:", envFile);
-  process.exit(1);
-}
-
 const envPath = path.join(__dirname, '../../', envFile);
-
-// Ensure the envPath is a valid string
-if (typeof envPath !== 'string' || !envPath) {
-  console.error("Environment path is invalid. Check the construction of envPath.");
-  process.exit(1);
-}
-
-// Load environment variables
 dotenv.config({ path: envPath });
 
 console.log(`Using environment file: ${envFile}`);
-console.log(`Url: ${process.env.REACT_APP_API_BASE_URL}`);
-// Get environment variables
-const mongoURI = process.env.MONGO_URI;
+console.log(`API Base URL: ${process.env.REACT_APP_API_BASE_URL}`);
 
+// MongoDB URI
+const mongoURI = process.env.MONGO_URI;
 if (!mongoURI) {
   console.error("MONGO_URI is undefined. Check your .env file.");
   process.exit(1);
 }
 
-// Enhanced CORS configuration with dynamic origin handling and logging
+// Open-Origin CORS Configuration
 const corsOptions = {
-  origin: (origin, callback) => {
-    const allowedOrigin = [
-       process.env.REACT_APP_API_BASE_URL,
-       "https://watches-qg3w25mlt-taha-mehmoods-projects-175bb778.vercel.app",
-       "http://localhost:3000"]// Replace with your frontend development URL
-    
-    console.log("Incoming Origin:", origin);
-    console.log("Allowed Origin:", allowedOrigin);
-
-    if (origin === allowedOrigin || !origin) {
-      console.log("CORS: Origin allowed");
-      callback(null, true); // Allow the request
-    } else {
-      console.error("CORS: Origin not allowed");
-      callback(new Error("Not allowed by CORS")); // Reject the request
-    }
-  },
+  origin: '*', // Allow all origins
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true, // Enable credentials for cookies or Authorization headers
+  credentials: false, // Disable credentials for open-origin policy
 };
 
-// Middleware to log incoming requests
+// Apply CORS middleware
+app.use(cors(corsOptions));
+
+// Middleware to log requests
 app.use((req, res, next) => {
   console.log("Incoming Request:", {
     method: req.method,
@@ -76,13 +49,8 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use(cors({
-  origin: 'https://watches-qg3w25mlt-taha-mehmoods-projects-175bb778.vercel.app',
-  origin: "http://localhost:3000",
-  
-   // Specify your frontend's origin
-})); // Apply CORS middleware
-app.use(express.json()); // Enable parsing JSON requests
+// Enable JSON parsing
+app.use(express.json());
 app.use('/api', auth);
 
 // MongoDB connection
@@ -108,7 +76,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-// A simple test route
+// Test Route
 app.get("/api/test", (req, res) => {
   res.json({ message: "CORS is configured correctly!" });
 });
