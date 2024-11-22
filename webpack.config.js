@@ -4,6 +4,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
+const process = require('process');  // Polyfill for process
 
 module.exports = {
   mode: 'production',
@@ -102,6 +103,7 @@ module.exports = {
     extensions: ['.js', '.jsx', '.json'],
     alias: {
       '@': path.resolve(__dirname, 'src'),
+      process: 'process/browser',  // Alias process to use the browser version
     },
   },
   devServer: {
