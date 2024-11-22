@@ -33,7 +33,7 @@ if (typeof envPath !== 'string' || !envPath) {
 dotenv.config({ path: envPath });
 
 console.log(`Using environment file: ${envFile}`);
-
+console.log(`Url: ${process.env.REACT_APP_API_BASE_URL}`);
 // Get environment variables
 const mongoURI = process.env.MONGO_URI;
 
@@ -46,7 +46,7 @@ if (!mongoURI) {
 const corsOptions = {
   origin: (origin, callback) => {
     const allowedOrigin = process.env.NODE_ENV === "production"
-      ? "https://watches-jo9ox120r-taha-mehmoods-projects-175bb778.vercel.app"
+      ? process.env.REACT_APP_API_BASE_URL
       : "http://localhost:3000"; // Replace with your frontend development URL
     
     console.log("Incoming Origin:", origin);
