@@ -37,7 +37,7 @@ const Login = () => {
     const { email, password } = formData;
 
     try {
-      const response = await axios.post("https://watches-jo9ox120r-taha-mehmoods-projects-175bb778.vercel.app/api/login", { email, password });
+      const response = await api.post("/login", { email, password });
       const { userId, firstName, lastName, token, message } = response.data;
 
       // Store auth data
