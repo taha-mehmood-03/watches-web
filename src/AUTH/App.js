@@ -42,7 +42,7 @@ if (!mongoURI) {
   process.exit(1);
 }
 
-// CORS configuration
+// CORS configurationarshias91
 const corsOptions = {
   origin: process.env.NODE_ENV === "production"
     ? process.env.REACT_APP_API_BASE_URL
