@@ -28,23 +28,12 @@ if (!mongoURI) {
 }
 
 // CORS Configuration
-const allowedOrigins = [
-  'https://watches-web-weld.vercel.app',  // Production frontend
-  'http://localhost:3000',               // Local development
-];
 
 const corsOptions = {
-  origin: function (origin, callback) {
-    // Allow requests with no origin (mobile apps, curl requests, etc.)
-    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
-    }
-  },
+  origin: process.env.CORS_ALLOWED_ORIGINS.split(','), // Make sure this reads from the environment
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true, // Allow cookies and other credentials
+  credentials: true, // Allow cookies if needed
 };
 
 // Middleware
