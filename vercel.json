@@ -2,7 +2,7 @@
     "version": 2,
     "builds": [
       {
-        "src": "BACKEND/App.js",
+        "src": "src/App.js",
         "use": "@vercel/node"
       },
       {
@@ -20,7 +20,7 @@
       },
       {
         "src": "/(.*)",
-        "dest": "/e-commerce/build/$1"
+        "dest": "/src/build/$1"
       }
     ],
     "env": {
