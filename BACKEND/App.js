@@ -16,9 +16,7 @@ const app = express();
 dotenv.config({
   path: path.join(
     __dirname,
-    process.env.NODE_ENV === "production"
-      ? ".env.production"
-      : ".env.development"
+    process.env.NODE_ENV === "production" ? ".env.production" : ".env.development"
   ),
 });
 
@@ -30,11 +28,23 @@ if (!mongoURI) {
 }
 
 // CORS Configuration
+const allowedOrigins = [
+  'https://watches-web-weld.vercel.app',  // Production frontend
+  'http://localhost:3000',               // Local development
+];
+
 const corsOptions = {
-  origin: process.env.REACT_APP_API_BASE_URL || "*",
+  origin: function (origin, callback) {
+    // Allow requests with no origin (mobile apps, curl requests, etc.)
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,
+  credentials: true, // Allow cookies and other credentials
 };
 
 // Middleware
@@ -47,15 +57,22 @@ app.use((req, res, next) => {
   next();
 });
 
-// MongoDB connection
-mongoose
-  .connect(mongoURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    dbName: "WATCHESSTORE",
-  })
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+// MongoDB connection with retry mechanism
+const connectToDatabase = async () => {
+  try {
+    await mongoose.connect(mongoURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      dbName: "WATCHESSTORE",
+    });
+    console.log("Connected to MongoDB");
+  } catch (err) {
+    console.error("MongoDB connection error:", err);
+    setTimeout(connectToDatabase, 5000); // Retry after 5 seconds
+  }
+};
+
+connectToDatabase(); // Initial call to connect to the database
 
 // Routes
 app.use("/api/auth", authRoutes);
@@ -63,12 +80,16 @@ app.use("/api/watches", watchRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/address", addressRoutes);
 
-// Health check route
+// Health check route (Enhanced version with more info)
 app.get("/api/health", (req, res) => {
-  res.json({ status: "healthy", environment: process.env.NODE_ENV });
+  res.json({
+    status: "healthy",
+    environment: process.env.NODE_ENV,
+    database: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+  });
 });
 
-// Error handler
+// Error handler (Centralized and async-aware)
 app.use((err, req, res, next) => {
   console.error("Error:", err);
   res.status(err.status || 500).json({
