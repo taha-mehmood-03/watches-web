@@ -19,7 +19,7 @@ function importAll(r) {
   });
   keys.forEach((key) => imageImports.push(r(key)));
 }
-const context = require.context("../Watchimages/", false, /\.(webp)$/);
+const context = require.context("../../../../public/Watchimages/", false, /\.(webp)$/);
 importAll(context);
 
 const Card = () => {
