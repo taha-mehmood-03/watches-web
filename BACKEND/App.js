@@ -37,7 +37,12 @@ const corsOptions = {
 };
 
 // Middleware
-app.use(cors(corsOptions));
+app.use(cors({
+  origin: 'https://watches-web-weld.vercel.app',  // Allow only this origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Allow these methods
+  allowedHeaders: ['Content-Type', 'Authorization'],  // Allow necessary headers
+  credentials: true  // If you're using cookies or auth tokens
+}));
 app.use(express.json());
 app.options('*', cors(corsOptions));  // Explicitly handle OPTIONS requests for all routes
 app.use((req, res, next) => {
