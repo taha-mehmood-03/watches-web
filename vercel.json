@@ -2,25 +2,22 @@
     "version": 2,
     "builds": [
       {
-        "src": "src/App.js",
+        "src": "BACKEND/App.js", 
         "use": "@vercel/node"
       },
       {
-        "src": "e-commerce/package.json",
-        "use": "@vercel/static-build",
-        "config": {
-          "distDir": "build"
-        }
+        "src": "src/**", 
+        "use": "@vercel/static"
       }
     ],
     "routes": [
       {
         "src": "/api/(.*)",
-        "dest": "/BACKEND/App.js"
+        "dest": "/BACKEND/App.js" 
       },
       {
         "src": "/(.*)",
-        "dest": "/src/build/$1"
+        "dest": "/src/$1" 
       }
     ],
     "env": {
