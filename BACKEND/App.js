@@ -90,6 +90,12 @@ app.get("/api/health", (req, res) => {
     database: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
   });
 });
+// Example for Node.js/Express
+app.use((req, res, next) => {
+  res.setHeader("Content-Security-Policy", 
+    "default-src 'none'; script-src 'self' https://vercel.live;");
+  next();
+});
 
 // Error handler (Centralized and async-aware)
 app.use((err, req, res, next) => {
