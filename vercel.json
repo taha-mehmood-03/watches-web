@@ -6,7 +6,7 @@
         "use": "@vercel/node"
       },
       {
-        "src": "src/**/*.{js,jsx}",
+        "src": "e-commerce/package.json",
         "use": "@vercel/static-build",
         "config": {
           "distDir": "build"
@@ -20,25 +20,14 @@
       },
       {
         "src": "/(.*)",
-        "dest": "/src/$1"
+        "dest": "/e-commerce/build/$1"
       }
     ],
     "env": {
       "MONGO_URI": "mongodb+srv://tahakhan:taha20416@cluster0.biepv.mongodb.net/WATCHESSTORE?retryWrites=true&w=majority&appName=Cluster0",
       "REACT_APP_API_BASE_URL": "https://watches-web-teal.vercel.app/api",
       "JWT_SECRET": "d#&s8F$A5^yZ6tW*Rk@3pV!9nC7jG2mL4",
-      "PORT": "80",
-      "NODE_ENV": "production",
-      "DB_PASSWORD": "taha20416"
-    },
-    "builds": [
-      {
-        "src": "src/package.json",
-        "use": "@vercel/static-build",
-        "config": {
-          "distDir": "build"
-        }
-      }
-    ]
+      "NODE_ENV": "production"
+    }
   }
   
