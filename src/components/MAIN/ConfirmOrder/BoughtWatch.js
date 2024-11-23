@@ -21,7 +21,7 @@ const BoughtWatch = () => {
   const updateQuantity = useCallback(
     async (name, userId, qty) => {
       try {
-        const response = await api.put("/updatecart", {
+        const response = await api.put("/cart/updatecart", {
           name: name,
           userId: userId,
           quantity: qty,
@@ -77,7 +77,7 @@ const BoughtWatch = () => {
   const deleteWatch = useCallback(
     async (name) => {
       try {
-        const response = await api.delete("/deleting", {
+        const response = await api.delete("/cart/deleting", {
           data: { name },
         });
 

@@ -25,7 +25,7 @@ export const getCartdata = () => async (dispatch) => {
       return;
     } // Get userId from Redux state
     dispatch(setUserId(userId)); // Optionally set userId in Redux state if necessary
-    const response = await api.get("/carting", { params: { userId } }); // Pass userId as query parameter
+    const response = await api.get("/cart/carting", { params: { userId } }); // Pass userId as query parameter
     dispatch(setCartdata(response.data));
     console.log("Response Data:", response.data);
   } catch (error) {

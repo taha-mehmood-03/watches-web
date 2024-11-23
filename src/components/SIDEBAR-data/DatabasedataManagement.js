@@ -25,7 +25,7 @@ export default dataSlice.reducer;
 //we will use pagination when we will be fetching more products than 13
 export const getDatabase = () => async (dispatch) => {
   try {
-    const response = await api.get('/Ordering');
+    const response = await api.get('/watches/Ordering');
     dispatch(setData(response.data));
   } catch (error) {
     console.error('Axios Error:', error);

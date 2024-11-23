@@ -1,11 +1,6 @@
 import React, { useEffect, memo, Suspense, lazy, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  ChevronRight, 
-  Filter, 
-  X, 
-  Sliders 
-} from "lucide-react";
+import { ChevronRight, Filter, X, Sliders } from "lucide-react";
 import Selectinputs from "../SIDEBAR-data/SelectedInputs/Selectinputs";
 import AOS from "aos";
 import "aos/dist/aos.css";
@@ -24,15 +19,15 @@ const Resistances = lazy(() => import("./Allcomps/Resistances"));
 const LoadingFallback = () => (
   <div className="flex items-center justify-center p-4">
     <motion.div
-      animate={{ 
+      animate={{
         rotate: 360,
-        scale: [1, 1.1, 1]
+        scale: [1, 1.1, 1],
       }}
-      transition={{ 
-        duration: 1, 
-        repeat: Infinity, 
+      transition={{
+        duration: 1,
+        repeat: Infinity,
         ease: "easeInOut",
-        repeatType: "reverse"
+        repeatType: "reverse",
       }}
     >
       <Sliders className="w-8 h-8 text-blue-500 animate-pulse" />
@@ -45,10 +40,10 @@ const Sidebar = ({ toggle, onToggle }) => {
   const [activeSection, setActiveSection] = useState(null);
 
   useEffect(() => {
-    AOS.init({ 
-      duration: 800, 
-      easing: 'smooth',
-      once: true 
+    AOS.init({
+      duration: 800,
+      easing: "smooth",
+      once: true,
     });
 
     const updateScreenSize = () => {
@@ -86,12 +81,12 @@ const Sidebar = ({ toggle, onToggle }) => {
     open: {
       opacity: 1,
       backdropFilter: "blur(4px)",
-      transition: { duration: 0.3 }
+      transition: { duration: 0.3 },
     },
     closed: {
       opacity: 0,
       backdropFilter: "blur(0px)",
-      transition: { duration: 0.2 }
+      transition: { duration: 0.2 },
     },
   };
 
@@ -116,7 +111,11 @@ const Sidebar = ({ toggle, onToggle }) => {
           variants={overlayVariants}
           initial="closed"
           animate={toggle ? "open" : "closed"}
-          onClick={onToggle}
+          onClick={() => {
+            if (toggle) {
+              onToggle();
+            }
+          }}
         />
       )}
 
@@ -135,7 +134,7 @@ const Sidebar = ({ toggle, onToggle }) => {
         `}
       >
         {/* Header */}
-        <motion.div 
+        <motion.div
           className="sticky top-0 z-20 bg-gray-800/90 backdrop-blur-md p-4 flex justify-between items-center"
           initial={{ opacity: 0, y: -50 }}
           animate={{ opacity: 1, y: 0 }}
@@ -145,7 +144,7 @@ const Sidebar = ({ toggle, onToggle }) => {
             <Sliders className="w-6 h-6 text-blue-400" />
             <h2 className="text-xl font-bold text-white">Filters</h2>
           </div>
-          
+
           {!isLargeScreen && (
             <motion.button
               onClick={onToggle}
@@ -158,7 +157,7 @@ const Sidebar = ({ toggle, onToggle }) => {
         </motion.div>
 
         {/* Selected Inputs */}
-        <motion.div 
+        <motion.div
           className="p-4 bg-gray-800/50 backdrop-blur-sm"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -168,7 +167,7 @@ const Sidebar = ({ toggle, onToggle }) => {
         </motion.div>
 
         {/* Filter Sections */}
-        <motion.div 
+        <motion.div
           className="
             overflow-y-auto 
             h-[calc(100vh-200px)] 
@@ -178,45 +177,55 @@ const Sidebar = ({ toggle, onToggle }) => {
           initial="closed"
           animate="open"
           style={{
-            scrollbarWidth: 'thin',
-            scrollbarColor: '#1E40AF #1F2937'
+            scrollbarWidth: "thin",
+            scrollbarColor: "#1E40AF #1F2937",
           }}
         >
           {components.map(({ Component, label, icon }, index) => (
             <motion.div
               key={label}
               initial={{ opacity: 0, x: -50 }}
-              animate={{ 
-                opacity: 1, 
+              animate={{
+                opacity: 1,
                 x: 0,
-                transition: { delay: 0.4 + index * 0.1 }
+                transition: { delay: 0.4 + index * 0.1 },
               }}
               className="mb-2"
             >
               <motion.div
                 className={`
                   group cursor-pointer 
-                  ${activeSection === label ? 'bg-blue-900/30' : 'hover:bg-gray-700/50'}
+                  ${
+                    activeSection === label
+                      ? "bg-blue-900/30"
+                      : "hover:bg-gray-700/50"
+                  }
                   rounded-lg transition-all duration-300 ease-in-out
                 `}
-                onClick={() => setActiveSection(activeSection === label ? null : label)}
+                onClick={() =>
+                  setActiveSection(activeSection === label ? null : label)
+                }
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
               >
                 <div className="flex items-center p-3 space-x-3">
                   {React.cloneElement(icon, {
                     className: `w-5 h-5 ${
-                      activeSection === label 
-                        ? 'text-blue-400' 
-                        : 'text-gray-400 group-hover:text-blue-300'
-                    }`
+                      activeSection === label
+                        ? "text-blue-400"
+                        : "text-gray-400 group-hover:text-blue-300"
+                    }`,
                   })}
-                  <span className={`
+                  <span
+                    className={`
                     text-sm font-medium 
-                    ${activeSection === label 
-                      ? 'text-blue-300' 
-                      : 'text-gray-300 group-hover:text-white'}
-                  `}>
+                    ${
+                      activeSection === label
+                        ? "text-blue-300"
+                        : "text-gray-300 group-hover:text-white"
+                    }
+                  `}
+                  >
                     {label}
                   </span>
                 </div>
@@ -225,10 +234,10 @@ const Sidebar = ({ toggle, onToggle }) => {
               {activeSection === label && (
                 <motion.div
                   initial={{ opacity: 0, height: 0 }}
-                  animate={{ 
-                    opacity: 1, 
-                    height: 'auto',
-                    transition: { duration: 0.3 }
+                  animate={{
+                    opacity: 1,
+                    height: "auto",
+                    transition: { duration: 0.3 },
                   }}
                 >
                   <Suspense fallback={<LoadingFallback />}>
@@ -250,13 +259,13 @@ const Sidebar = ({ toggle, onToggle }) => {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
           className="
-            fixed top-1/2 left-0 z-50 
+            fixed top-1/2 left-0 z-100
             bg-blue-600/80 backdrop-blur-sm 
             p-3 rounded-r-lg text-white
-            shadow-2xl hover:bg-blue-700/90
+            shadow-2xl hover:bg-blue-700/90 
           "
         >
-          <ChevronRight className="w-6 h-6" />
+          <ChevronRight className="w-6 h-6 " />
         </motion.button>
       )}
     </AnimatePresence>

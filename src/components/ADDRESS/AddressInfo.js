@@ -31,7 +31,7 @@ const AddressInfo = () => {
     const { firstName, lastName, postalCode, phone, address } = formData;
     const userId = localStorage.getItem("userId");
     try {
-      const response = await api.post('/AddAddress', {
+      const response = await api.post('/address/AddAddress', {
         userId,
         firstName,
         lastName,

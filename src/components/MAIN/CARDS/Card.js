@@ -112,7 +112,7 @@ const Card = () => {
           animate={{ scale: 1, opacity: 1 }}
           whileHover={{ y: -5 }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="group relative bg-black rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300"
+          className="group relative bg-black rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 z-40"
           onClick={() => handleClick(watch)}
         >
           {renderWatchImage(watch)}

@@ -81,7 +81,7 @@ const Signup = () => {
 
     try {
       const { firstName, lastName, email, password } = formData;
-      const response = await api.post('/signup', {
+      const response = await api.post('/auth/signup', {
         firstName,
         lastName,
         email,

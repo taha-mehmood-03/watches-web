@@ -24,7 +24,7 @@ export const Selectedwatch = (watch, navigate,quantity) => async (dispatch) => {
   try {
     const userId = localStorage.getItem("userId");
      // Extract quantity from watch object
-    const response = await api.post("/addcart", { ...watch, userId,  quantity });
+    const response = await api.post("/cart/addcart", { ...watch, userId,  quantity });
     console.log("Added to cart:", response.data);
     navigate("../cart");
   } catch (error) {
