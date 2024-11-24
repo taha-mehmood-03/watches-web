@@ -30,7 +30,7 @@ if (!mongoURI) {
 
 // CORS Configuration
 const corsOptions = {
-  origin: 'http://watches-web-weld.vercel.app', // Adjust based on your frontend URL
+  origin: 'https://watches-web-weld.vercel.app', // Adjust based on your frontend URL
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: [
     'Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin',

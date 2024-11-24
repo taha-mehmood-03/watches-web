@@ -37,7 +37,7 @@ const Login = () => {
     const { email, password } = formData;
 
     try {
-      const response = await axios.post("https://watches-web-apis.vercel.app/api/auth/login", { email, password });
+      const response = await api.post("/auth/login", { email, password });
       const { userId, firstName, lastName, token, message } = response.data;
 
       // Store auth data
