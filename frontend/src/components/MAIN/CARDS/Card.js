@@ -8,19 +8,42 @@ import { getDatabase } from "../../SIDEBAR-data/DatabasedataManagement";
 import { setUserId } from "../../SIDEBAR-data/UserId";
 import { setImage } from "../../SIDEBAR-data/ImageManagement";
 
-// Import handling remains the same
+// Image import handling with debug logs
 const imageImports = [];
 function importAll(r) {
-  const keys = r.keys();
-  keys.sort((a, b) => {
-    const indexA = parseInt(a.match(/(\d+)/)[0]);
-    const indexB = parseInt(b.match(/(\d+)/)[0]);
-    return indexA - indexB;
-  });
-  keys.forEach((key) => imageImports.push(r(key)));
+  try {
+    const keys = r.keys();
+    console.log('Available image keys:', keys); // Debug log for available images
+
+    keys.sort((a, b) => {
+      const indexA = parseInt(a.match(/(\d+)/)[0]);
+      const indexB = parseInt(b.match(/(\d+)/)[0]);
+      return indexA - indexB;
+    });
+
+    keys.forEach((key) => {
+      try {
+        const image = r(key);
+        imageImports.push(image);
+        console.log('Successfully imported:', key); // Log each successful import
+      } catch (err) {
+        console.error('Failed to import image:', key, err);
+      }
+    });
+
+    console.log('Total images imported:', imageImports.length); // Log total imports
+  } catch (error) {
+    console.error('Error in importAll function:', error);
+  }
 }
-const context = require.context("../../../../public/Watchimages/", false, /\.(webp)$/);
-importAll(context);
+
+try {
+  const context = require.context("../../../../public/Watchimages/", false, /\.(webp)$/);
+  console.log('Context created successfully'); // Debug log for context creation
+  importAll(context);
+} catch (error) {
+  console.error('Error creating context:', error);
+}
 
 const Card = () => {
   const [hoveredImage, setHoveredImage] = useState(null);
@@ -28,26 +51,45 @@ const Card = () => {
   const navigate = useNavigate();
   const currentData = useSelector((state) => state.Databasedata.currentData);
 
+  // Database fetching with debug logs
   useEffect(() => {
-    dispatch(getDatabase());
+    console.log('Fetching database data...'); // Debug log before fetch
+    dispatch(getDatabase())
+      .then(() => {
+        console.log('Database fetch successful');
+      })
+      .catch((error) => {
+        console.error('Database fetch failed:', error);
+      });
   }, [dispatch]);
+
+  // Debug log for current data changes
+  useEffect(() => {
+    console.log('Current database data:', currentData);
+  }, [currentData]);
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
     if (storedUserId) {
+      console.log('Found stored userId:', storedUserId); // Debug log for userId
       dispatch(setUserId(storedUserId));
+    } else {
+      console.log('No stored userId found');
     }
   }, [dispatch]);
 
   const handleImageEnter = (id) => {
     setHoveredImage(id);
+    console.log('Image hover entered:', id); // Debug log for hover state
   };
 
   const handleImageLeave = () => {
     setHoveredImage(null);
+    console.log('Image hover left'); // Debug log for hover state
   };
 
   const handleClick = (watch) => {
+    console.log('Watch clicked:', watch); // Debug log for click handling
     dispatch(setImage(watch.images[0]));
     dispatch(setWatch(watch));
     navigate("/Ordering");
@@ -71,6 +113,10 @@ const Card = () => {
             loading="lazy"
             layoutId={`watch-${watch.id}`}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            onError={(e) => {
+              console.error('Image failed to load:', watch.images[hoveredImage === watch.id ? 1 : 0]);
+              // You might want to set a fallback image here
+            }}
           />
           <motion.div 
             initial={{ opacity: 0 }}
@@ -97,6 +143,9 @@ const Card = () => {
     },
     [hoveredImage]
   );
+
+  // Debug log for rendering
+  console.log('Rendering cards with data length:', currentData?.length);
 
   return (
     <motion.div 
