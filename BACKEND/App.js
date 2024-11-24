@@ -12,7 +12,7 @@ const addressRoutes = require("./routes/addressRoutes");
 
 const app = express();
 
-// Load environment variables based on NODE_ENV
+// Load environment variables
 dotenv.config({
   path: path.join(
     __dirname,
@@ -28,30 +28,19 @@ if (!mongoURI) {
 }
 
 // CORS Configuration
-
 const corsOptions = {
-  origin: process.env.CORS_ALLOWED_ORIGINS.split(','), // Make sure this reads from the environment
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true, // Allow cookies if needed
+  origin: 'https://watches-web-weld.vercel.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+  maxAge: 86400 // CORS preflight cache time in seconds
 };
 
-// Middleware
-app.use(cors({
-  origin: 'https://watches-web-weld.vercel.app',  // Allow only this origin
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],  // Allow these methods
-  allowedHeaders: ['Content-Type', 'Authorization'],  // Allow necessary headers
-  credentials: true  // If you're using cookies or auth tokens
-}));
-app.use(express.json());
-app.options('*', cors(corsOptions));  // Explicitly handle OPTIONS requests for all routes
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*'); // Allow requests from any origin or specify a list
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
-  next();
-});
+// Apply CORS middleware
+app.use(cors(corsOptions));
 
+// Body parser middleware
+app.use(express.json());
 
 // Request Logger
 app.use((req, res, next) => {
@@ -70,11 +59,11 @@ const connectToDatabase = async () => {
     console.log("Connected to MongoDB");
   } catch (err) {
     console.error("MongoDB connection error:", err);
-    setTimeout(connectToDatabase, 5000); // Retry after 5 seconds
+    setTimeout(connectToDatabase, 5000);
   }
 };
 
-connectToDatabase(); // Initial call to connect to the database
+connectToDatabase();
 
 // Routes
 app.use("/api/auth", authRoutes);
@@ -82,7 +71,7 @@ app.use("/api/watches", watchRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/address", addressRoutes);
 
-// Health check route (Enhanced version with more info)
+// Health check route
 app.get("/api/health", (req, res) => {
   res.json({
     status: "healthy",
@@ -90,14 +79,17 @@ app.get("/api/health", (req, res) => {
     database: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
   });
 });
-// Example for Node.js/Express
+
+// Content Security Policy
 app.use((req, res, next) => {
-  res.setHeader("Content-Security-Policy", 
-    "default-src 'none'; script-src 'self' vercel.live;");
+  res.setHeader(
+    "Content-Security-Policy",
+    "default-src 'none'; script-src 'self' vercel.live;"
+  );
   next();
 });
 
-// Error handler (Centralized and async-aware)
+// Error handler
 app.use((err, req, res, next) => {
   console.error("Error:", err);
   res.status(err.status || 500).json({
