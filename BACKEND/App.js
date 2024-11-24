@@ -93,7 +93,7 @@ app.get("/api/health", (req, res) => {
 // Example for Node.js/Express
 app.use((req, res, next) => {
   res.setHeader("Content-Security-Policy", 
-    "default-src 'none'; script-src 'self' https://vercel.live;");
+    "default-src 'none'; script-src 'self' vercel.live;");
   next();
 });
 
