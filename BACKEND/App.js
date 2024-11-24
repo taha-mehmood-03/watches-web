@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const path = require("path");
+const morgan = require("morgan"); // Import morgan for logging
 
 // Import routes
 const authRoutes = require("./routes/authRoutes");
@@ -12,7 +13,7 @@ const addressRoutes = require("./routes/addressRoutes");
 
 const app = express();
 
-// Load environment variables
+// Load environment variables based on NODE_ENV
 dotenv.config({
   path: path.join(
     __dirname,
@@ -29,20 +30,43 @@ if (!mongoURI) {
 
 // CORS Configuration
 const corsOptions = {
-  origin: 'https://watches-web-weld.vercel.app',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  origin: 'http://watches-web-weld.vercel.app', // Adjust based on your frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: [
+    'Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin',
+    'Access-Control-Allow-Headers', 'Access-Control-Allow-Origin', 'Access-Control-Allow-Methods'
+  ],
   credentials: true,
-  maxAge: 86400 // CORS preflight cache time in seconds
+  maxAge: 86400
 };
 
 // Apply CORS middleware
 app.use(cors(corsOptions));
 
-// Body parser middleware
+// Add additional headers middleware (for pre-flight checks)
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'https://watches-web-weld.vercel.app');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Headers'
+  );
+
+  // Handle OPTIONS method
+  if (req.method === 'OPTIONS') {
+    return res.sendStatus(200);
+  }
+  next();
+});
+
+// Morgan request logger middleware
+app.use(morgan('combined')); // Logs requests in 'combined' format for production or 'dev' for development
+
+// Body parser middleware for JSON data
 app.use(express.json());
 
-// Request Logger
+// Request Logger - Custom logging with timestamp
 app.use((req, res, next) => {
   console.log(`${req.method} ${req.path} - ${new Date().toISOString()}`);
   next();
@@ -59,7 +83,7 @@ const connectToDatabase = async () => {
     console.log("Connected to MongoDB");
   } catch (err) {
     console.error("MongoDB connection error:", err);
-    setTimeout(connectToDatabase, 5000);
+    setTimeout(connectToDatabase, 5000); // Retry connection every 5 seconds
   }
 };
 
@@ -71,7 +95,7 @@ app.use("/api/watches", watchRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/address", addressRoutes);
 
-// Health check route
+// Health check route to ensure the server is running
 app.get("/api/health", (req, res) => {
   res.json({
     status: "healthy",
@@ -80,16 +104,7 @@ app.get("/api/health", (req, res) => {
   });
 });
 
-// Content Security Policy
-app.use((req, res, next) => {
-  res.setHeader(
-    "Content-Security-Policy",
-    "default-src 'none'; script-src 'self' vercel.live;"
-  );
-  next();
-});
-
-// Error handler
+// Error handler middleware for unexpected errors
 app.use((err, req, res, next) => {
   console.error("Error:", err);
   res.status(err.status || 500).json({
@@ -98,7 +113,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start server
+// Start the server
 const port = process.env.PORT || 4003;
 app.listen(port, () => {
   console.log(`Server running in ${process.env.NODE_ENV} mode on port ${port}`);
