@@ -38,7 +38,7 @@ function importAll(r) {
 }
 
 try {
-  const context = require.context("../../../../public/Watchimages/", false, /\.(webp)$/);
+  const context = require.context("../Watchimages/", false, /\.(webp)$/);
   console.log('Context created successfully'); // Debug log for context creation
   importAll(context);
 } catch (error) {
