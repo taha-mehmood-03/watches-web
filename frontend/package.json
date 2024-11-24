@@ -10,6 +10,8 @@
     "client": "react-scripts start",
     "dev": "concurrently \"npm run client\""
   },
+ "proxy": "https://watches-web-apis.vercel.app",
+
   "dependencies": {
     "@emotion/react": "^11.13.5",
     "@emotion/styled": "^11.13.5",

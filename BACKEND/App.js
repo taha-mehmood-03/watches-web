@@ -95,6 +95,13 @@ app.use("/api/watches", watchRoutes);
 app.use("/api/cart", cartRoutes);
 app.use("/api/address", addressRoutes);
 
+
+// Add a route for the root path to display a simple message
+app.get("/", (req, res) => {
+  res.send("Hello, server is alive");
+});
+
+
 // Health check route to ensure the server is running
 app.get("/api/health", (req, res) => {
   res.json({
