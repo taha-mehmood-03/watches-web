@@ -97,6 +97,8 @@ const Card = () => {
 
   const renderWatchImage = useCallback(
     (watch) => {
+      console.log('Rendering images for watch:', watch.name); // Debug log for each watch's image render
+
       return (
         <motion.div
           initial={{ opacity: 0 }}
@@ -153,49 +155,53 @@ const Card = () => {
       animate={{ opacity: 1 }}
       className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 p-4"
     >
-      {currentData.map((watch) => (
-        <motion.div
-          key={watch.id}
-          layoutId={`card-${watch.id}`}
-          initial={{ scale: 0.9, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          whileHover={{ y: -5 }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="group relative bg-black rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 z-40"
-          onClick={() => handleClick(watch)}
-        >
-          {renderWatchImage(watch)}
-          
-          <motion.div 
-            className="w-full flex flex-col items-center justify-start bg-gray-900 p-4 rounded-b-lg"
+      {currentData.map((watch) => {
+        console.log('Rendering card for watch:', watch.name); // Debug log for each card
+
+        return (
+          <motion.div
+            key={watch.id}
+            layoutId={`card-${watch.id}`}
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            whileHover={{ y: -5 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="group relative bg-black rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-shadow duration-300 z-40"
+            onClick={() => handleClick(watch)}
           >
-            <motion.p 
-              className="w-full text-center text-gray-100 font-semibold text-lg mb-2 truncate"
-              layoutId={`name-${watch.id}`}
+            {renderWatchImage(watch)}
+
+            <motion.div 
+              className="w-full flex flex-col items-center justify-start bg-gray-900 p-4 rounded-b-lg"
             >
-              {watch.name}
-            </motion.p>
-            
-            <motion.div className="flex items-center justify-between w-full">
-              <motion.span 
-                className="text-xl font-bold text-gray-300"
-                layoutId={`price-${watch.id}`}
+              <motion.p 
+                className="w-full text-center text-gray-100 font-semibold text-lg mb-2 truncate"
+                layoutId={`name-${watch.id}`}
               >
-                ${watch.price}
-              </motion.span>
-              
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-              >
-                <ShoppingCart className="w-4 h-4" />
-                <span>Add to Cart</span>
-              </motion.button>
+                {watch.name}
+              </motion.p>
+
+              <motion.div className="flex items-center justify-between w-full">
+                <motion.span 
+                  className="text-xl font-bold text-gray-300"
+                  layoutId={`price-${watch.id}`}
+                >
+                  ${watch.price}
+                </motion.span>
+
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="flex items-center gap-2 bg-blue-600 text-white px-4 py-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                >
+                  <ShoppingCart className="w-4 h-4" />
+                  <span>Add to Cart</span>
+                </motion.button>
+              </motion.div>
             </motion.div>
           </motion.div>
-        </motion.div>
-      ))}
+        );
+      })}
     </motion.div>
   );
 };
