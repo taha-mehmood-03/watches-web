@@ -7,7 +7,6 @@ import { setWatch } from "../../SIDEBAR-data/WatchManagement";
 import { getDatabase } from "../../SIDEBAR-data/DatabasedataManagement";
 import { setUserId } from "../../SIDEBAR-data/UserId";
 import { setImage } from "../../SIDEBAR-data/ImageManagement";
-
 // Image import handling with debug logs
 const imageImports = [];
 function importAll(r) {
@@ -98,7 +97,7 @@ const Card = () => {
   const renderWatchImage = useCallback(
     (watch) => {
       console.log('Rendering images for watch:', watch.name); // Debug log for each watch's image render
-
+      const imageUrl = `../../../../public/images/${watch.images[hoveredImage === watch.id ? 1 : 0]}`;
       return (
         <motion.div
           initial={{ opacity: 0 }}
@@ -107,7 +106,7 @@ const Card = () => {
           className="relative w-full pt-[100%] overflow-hidden bg-gray-800 rounded-t-lg"
         >
           <motion.img
-            src={hoveredImage === watch.id ? watch.images[1] : watch.images[0]}
+            src={imageUrl}
             alt={watch.name}
             className="absolute top-0 left-0 w-full h-full object-contain"
             onMouseEnter={() => handleImageEnter(watch.id)}
