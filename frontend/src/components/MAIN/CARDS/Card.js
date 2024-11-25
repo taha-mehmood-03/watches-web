@@ -97,7 +97,7 @@ const Card = () => {
   const renderWatchImage = useCallback(
     (watch) => {
       console.log('Rendering images for watch:', watch.name); // Debug log for each watch's image render
-      const imageUrl = `../../../../public/images/${watch.images[hoveredImage === watch.id ? 1 : 0]}`;
+      const imageUrl = `/images/${watch.images[hoveredImage === watch.id ? 1 : 0]}`;
       return (
         <motion.div
           initial={{ opacity: 0 }}
