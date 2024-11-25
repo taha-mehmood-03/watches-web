@@ -1,8 +1,3 @@
-
-
-
-
-
 import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,7 +13,7 @@ const imageImports = [];
 function importAll(r) {
   try {
     const keys = r.keys();
-    console.log("Available image keys:", keys); // Debug log for available images
+    console.log('Available image keys:', keys); // Debug log for available images
 
     keys.sort((a, b) => {
       const indexA = parseInt(a.match(/(\d+)/)[0]);
@@ -30,24 +25,24 @@ function importAll(r) {
       try {
         const image = r(key);
         imageImports.push(image);
-        console.log("Successfully imported:", key); // Log each successful import
+        console.log('Successfully imported:', key); // Log each successful import
       } catch (err) {
-        console.error("Failed to import image:", key, err);
+        console.error('Failed to import image:', key, err);
       }
     });
 
-    console.log("Total images imported:", imageImports.length); // Log total imports
+    console.log('Total images imported:', imageImports.length); // Log total imports
   } catch (error) {
-    console.error("Error in importAll function:", error);
+    console.error('Error in importAll function:', error);
   }
 }
 
 try {
-  const context = require.context("../Watchimages/", false, /\.(webp)$/);
-  console.log("Context created successfully"); // Debug log for context creation
+  const context = require.context("../../../../public/images/", false, /\.(webp)$/);
+  console.log('Context created successfully'); // Debug log for context creation
   importAll(context);
 } catch (error) {
-  console.error("Error creating context:", error);
+  console.error('Error creating context:', error);
 }
 
 const Card = () => {
@@ -58,43 +53,43 @@ const Card = () => {
 
   // Database fetching with debug logs
   useEffect(() => {
-    console.log("Fetching database data..."); // Debug log before fetch
+    console.log('Fetching database data...'); // Debug log before fetch
     dispatch(getDatabase())
       .then(() => {
-        console.log("Database fetch successful");
+        console.log('Database fetch successful');
       })
       .catch((error) => {
-        console.error("Database fetch failed:", error);
+        console.error('Database fetch failed:', error);
       });
   }, [dispatch]);
 
   // Debug log for current data changes
   useEffect(() => {
-    console.log("Current database data:", currentData);
+    console.log('Current database data:', currentData);
   }, [currentData]);
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("userId");
     if (storedUserId) {
-      console.log("Found stored userId:", storedUserId); // Debug log for userId
+      console.log('Found stored userId:', storedUserId); // Debug log for userId
       dispatch(setUserId(storedUserId));
     } else {
-      console.log("No stored userId found");
+      console.log('No stored userId found');
     }
   }, [dispatch]);
 
   const handleImageEnter = (id) => {
     setHoveredImage(id);
-    console.log("Image hover entered:", id); // Debug log for hover state
+    console.log('Image hover entered:', id); // Debug log for hover state
   };
 
   const handleImageLeave = () => {
     setHoveredImage(null);
-    console.log("Image hover left"); // Debug log for hover state
+    console.log('Image hover left'); // Debug log for hover state
   };
 
   const handleClick = (watch) => {
-    console.log("Watch clicked:", watch); // Debug log for click handling
+    console.log('Watch clicked:', watch); // Debug log for click handling
     dispatch(setImage(watch.images[0]));
     dispatch(setWatch(watch));
     navigate("/Ordering");
@@ -102,8 +97,8 @@ const Card = () => {
 
   const renderWatchImage = useCallback(
     (watch) => {
-      console.log("Rendering images for watch:", watch.name); // Debug log for each watch's image render
-      const imageUrl = `/${watch.images[hoveredImage === watch.id ? 1 : 0]}`;
+      console.log('Rendering images for watch:', watch.name); // Debug log for each watch's image render
+
       return (
         <motion.div
           initial={{ opacity: 0 }}
@@ -112,7 +107,7 @@ const Card = () => {
           className="relative w-full pt-[100%] overflow-hidden bg-gray-800 rounded-t-lg"
         >
           <motion.img
-            src={imageUrl}
+            src={hoveredImage === watch.id ? watch.images[1] : watch.images[0]}
             alt={watch.name}
             className="absolute top-0 left-0 w-full h-full object-contain"
             onMouseEnter={() => handleImageEnter(watch.id)}
@@ -121,14 +116,11 @@ const Card = () => {
             layoutId={`watch-${watch.id}`}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             onError={(e) => {
-              console.error(
-                "Image failed to load:",
-                watch.images[hoveredImage === watch.id ? 1 : 0]
-              );
+              console.error('Image failed to load:', watch.images[hoveredImage === watch.id ? 1 : 0]);
               // You might want to set a fallback image here
             }}
           />
-          <motion.div
+          <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: hoveredImage === watch.id ? 1 : 0 }}
             className="absolute top-4 right-4 flex flex-col gap-2"
@@ -155,16 +147,16 @@ const Card = () => {
   );
 
   // Debug log for rendering
-  console.log("Rendering cards with data length:", currentData?.length);
+  console.log('Rendering cards with data length:', currentData?.length);
 
   return (
-    <motion.div
+    <motion.div 
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 p-4"
     >
       {currentData.map((watch) => {
-        console.log("Rendering card for watch:", watch.name); // Debug log for each card
+        console.log('Rendering card for watch:', watch.name); // Debug log for each card
 
         return (
           <motion.div
@@ -179,8 +171,10 @@ const Card = () => {
           >
             {renderWatchImage(watch)}
 
-            <motion.div className="w-full flex flex-col items-center justify-start bg-gray-900 p-4 rounded-b-lg">
-              <motion.p
+            <motion.div 
+              className="w-full flex flex-col items-center justify-start bg-gray-900 p-4 rounded-b-lg"
+            >
+              <motion.p 
                 className="w-full text-center text-gray-100 font-semibold text-lg mb-2 truncate"
                 layoutId={`name-${watch.id}`}
               >
@@ -188,7 +182,7 @@ const Card = () => {
               </motion.p>
 
               <motion.div className="flex items-center justify-between w-full">
-                <motion.span
+                <motion.span 
                   className="text-xl font-bold text-gray-300"
                   layoutId={`price-${watch.id}`}
                 >
