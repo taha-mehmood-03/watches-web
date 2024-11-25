@@ -98,7 +98,9 @@ const Card = () => {
   const renderWatchImage = useCallback(
     (watch) => {
       console.log('Rendering images for watch:', watch.name); // Debug log for each watch's image render
-  
+   
+      const imageUrl = hoveredImage === watch.id ? `/public${watch.images[1]}` : `/public${watch.images[0]}`
+
       return (
         <motion.div
           initial={{ opacity: 0 }}
@@ -107,7 +109,7 @@ const Card = () => {
           className="relative w-full pt-[100%] overflow-hidden bg-gray-800 rounded-t-lg"
         >
           <motion.img
-            src={hoveredImage === watch.id ? `/public${watch.images[1]}` : `/public${watch.images[0]}`}
+            src={imageUrl}
             alt={watch.name}
             className="absolute top-0 left-0 w-full h-full object-contain"
             onMouseEnter={() => handleImageEnter(watch.id)}
@@ -116,7 +118,7 @@ const Card = () => {
             layoutId={`watch-${watch.id}`}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             onError={(e) => {
-              console.error('Image failed to load:', `/public${watch.images[hoveredImage === watch.id ? 1 : 0]}`);
+              console.error('Image failed to load:', watch.images[hoveredImage === watch.id ? 1 : 0]);
               // You might want to set a fallback image here
             }}
           />
@@ -145,7 +147,6 @@ const Card = () => {
     },
     [hoveredImage]
   );
-  
 
   // Debug log for rendering
   console.log('Rendering cards with data length:', currentData?.length);
