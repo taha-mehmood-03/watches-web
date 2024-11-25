@@ -73,7 +73,6 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 
-app.use('/images', express.static(path.join(__dirname, 'public/images')));
 // Additional headers middleware for better CORS handling
 app.use((req, res, next) => {
   const origin = req.headers.origin;
