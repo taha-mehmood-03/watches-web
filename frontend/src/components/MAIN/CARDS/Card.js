@@ -2,6 +2,7 @@
 
 
 
+
 import React, { useEffect, useState, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -102,7 +103,8 @@ const Card = () => {
   const renderWatchImage = useCallback(
     (watch) => {
       console.log("Rendering images for watch:", watch.name); // Debug log for each watch's image render
-      const imageUrl = `${process.env.REACT_APP_API_BASE_URL}/images/${watch.images[hoveredImage === watch.id ? 1 : 0]}`;      return (
+      const imageUrl = `/${watch.images[hoveredImage === watch.id ? 1 : 0]}`;
+      return (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
