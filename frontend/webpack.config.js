@@ -16,7 +16,7 @@ module.exports = {
   output: {
     filename: '[name].[contenthash].js',
     path: path.resolve(__dirname, 'build'),
-    publicPath: '/',
+    publicPath: '/', // Ensure images are loaded from the root
     clean: true,
   },
   optimization: {
@@ -109,14 +109,20 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.jsx', '.json'],
     fallback: {
-      "process": require.resolve("process/browser")
+      process: require.resolve('process/browser'),
     },
     alias: {
       '@': path.resolve(__dirname, 'src'),
-      'process': 'process/browser',
+      process: 'process/browser',
     },
   },
   devServer: {
     https: true,
+    static: {
+      directory: path.join(__dirname, 'public'), // Serve public folder as static
+    },
+    headers: {
+      'Content-Type': 'image/webp', // Ensure the correct MIME type is served
+    },
   },
 };
