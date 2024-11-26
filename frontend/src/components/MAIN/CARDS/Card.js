@@ -106,7 +106,7 @@ const Card = () => {
           className="relative w-full pt-[100%] overflow-hidden bg-gray-800 rounded-t-lg"
         >
           <motion.img
-            src={imageUrl}
+            src={imageUrl.src}
             alt={watch.name}
             className="absolute top-0 left-0 w-full h-full object-contain"
             onMouseEnter={() => handleImageEnter(watch.id)}
