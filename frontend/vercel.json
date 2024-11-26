@@ -22,7 +22,5 @@
         "source": "/images/(.*)",
         "destination": "/public/images/$1"
       }
-    
     ]
   }
-  
