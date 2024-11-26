@@ -90,8 +90,15 @@ app.use(morgan(morganFormat));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-// Serve static files from the 'public/images' folder
-app.use("/images", express.static(path.join(__dirname, "public/images")));
+// Serve static files from the 'public' folder
+app.use(express.static(path.join(__dirname, "public")));
+
+// Serve images from the 'public/images' folder
+app.get("/images/:imageName", (req, res) => {
+  const imageName = req.params.imageName;
+  const imagePath = path.join(__dirname, "public/images", imageName);
+  res.sendFile(imagePath);
+});
 
 // MongoDB connection with enhanced retry mechanism
 const connectToDatabase = async (retries = 5) => {
