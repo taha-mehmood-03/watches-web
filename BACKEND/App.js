@@ -31,67 +31,67 @@ if (!mongoURI) {
 // CORS Configuration
 const corsOptions = {
   origin: (origin, callback) => {
-    // Allow requests with no origin (mobile apps or curl requests)
     if (!origin) return callback(null, true);
 
-    // List of allowed domains
     const allowedDomains = [
-      'https://watches-web-weld.vercel.app',
-      'http://watches-web-weld.vercel.app',
-      'http://localhost:3000',
-      'http://localhost:5173',
+      "https://watches-web-weld.vercel.app",
+      "http://watches-web-weld.vercel.app",
+      "http://localhost:3000",
+      "http://localhost:5173",
     ];
 
-    // Allow Vercel Preview URLs
     const isVercelPreview = origin.match(/https:\/\/watches-.*?-.*?\.vercel\.app$/);
-    
+
     if (allowedDomains.includes(origin) || isVercelPreview) {
       callback(null, true);
     } else {
       console.log(`Blocked origin: ${origin}`);
-      callback(new Error('Not allowed by CORS'));
+      callback(new Error("Not allowed by CORS"));
     }
   },
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
   allowedHeaders: [
-    'Content-Type', 
-    'Authorization', 
-    'X-Requested-With', 
-    'Accept', 
-    'Origin',
-    'Access-Control-Allow-Headers', 
-    'Access-Control-Allow-Origin', 
-    'Access-Control-Allow-Methods'
+    "Content-Type",
+    "Authorization",
+    "X-Requested-With",
+    "Accept",
+    "Origin",
+    "Access-Control-Allow-Headers",
+    "Access-Control-Allow-Origin",
+    "Access-Control-Allow-Methods",
   ],
   credentials: true,
   maxAge: 86400,
   preflightContinue: false,
-  optionsSuccessStatus: 204
+  optionsSuccessStatus: 204,
 };
 
 // Apply CORS middleware
 app.use(cors(corsOptions));
 
-
 // Additional headers middleware for better CORS handling
 app.use((req, res, next) => {
   const origin = req.headers.origin;
   if (origin) {
-    res.setHeader('Vary', 'Origin');
+    res.setHeader("Vary", "Origin");
   }
   next();
 });
 
 // Morgan request logger middleware with custom format
-const morganFormat = process.env.NODE_ENV === 'production'
-  ? 'combined'
-  : ':method :url :status :response-time ms - :res[content-length] - :remote-addr';
+const morganFormat =
+  process.env.NODE_ENV === "production"
+    ? "combined"
+    : ":method :url :status :response-time ms - :res[content-length] - :remote-addr";
 
 app.use(morgan(morganFormat));
 
 // Body parser middleware with limits
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+
+// Serve static files from the 'public/images' folder
+app.use("/images", express.static(path.join(__dirname, "public/images")));
 
 // MongoDB connection with enhanced retry mechanism
 const connectToDatabase = async (retries = 5) => {
@@ -138,10 +138,10 @@ app.get("/api/health", (req, res) => {
     database: {
       status: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
       host: mongoose.connection.host,
-      name: mongoose.connection.name
+      name: mongoose.connection.name,
     },
     memory: process.memoryUsage(),
-    uptime: process.uptime()
+    uptime: process.uptime(),
   });
 });
 
@@ -153,13 +153,13 @@ app.use((err, req, res, next) => {
     stack: err.stack,
     path: req.path,
     method: req.method,
-    origin: req.headers.origin
+    origin: req.headers.origin,
   });
 
-  if (err.message === 'Not allowed by CORS') {
+  if (err.message === "Not allowed by CORS") {
     return res.status(403).json({
-      error: 'CORS Error',
-      message: `Origin '${req.headers.origin}' is not allowed`
+      error: "CORS Error",
+      message: `Origin '${req.headers.origin}' is not allowed`,
     });
   }
 
@@ -170,10 +170,10 @@ app.use((err, req, res, next) => {
 });
 
 // Graceful shutdown handler
-process.on('SIGTERM', () => {
-  console.log('Received SIGTERM signal. Starting graceful shutdown...');
+process.on("SIGTERM", () => {
+  console.log("Received SIGTERM signal. Starting graceful shutdown...");
   mongoose.connection.close(() => {
-    console.log('MongoDB connection closed.');
+    console.log("MongoDB connection closed.");
     process.exit(0);
   });
 });
