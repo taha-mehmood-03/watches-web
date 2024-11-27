@@ -11,10 +11,21 @@ const Imageblock = () => {
     AOS.init({ duration: 1200 });
   }, []);
 
+  // Function to safely require the image
+  const requireImage = (imageName) => {
+    try {
+      return require(`../../../../public/images/${imageName}`);
+    } catch (error) {
+      console.error(`Failed to load image: ${imageName}`, error);
+      return null; // Fallback if image cannot be loaded
+    }
+  };
+
+  // Determine the selected image, using require to load it
   const selectedImage = currentImage 
-  ? require(`../../../../../public/images/${currentImage}`).default 
-  : (currentWatch?.images?.length > 0 
-      ? require(`../../../../../public/images/${currentWatch.images[0]}`).default 
+    ? requireImage(currentImage)
+    : (currentWatch.images.length > 0 
+      ? requireImage(currentWatch.images[0]) 
       : null);
 
   return (
@@ -28,14 +39,14 @@ const Imageblock = () => {
       data-aos-mirror="true"
       data-aos-once="true"
       data-aos-anchor-placement="top-center"
-      style={{ minHeight: "300px", position: "relative" }} // Set a minimum height to prevent CLS
+      style={{ minHeight: "300px", position: "relative" }}
     >
       {selectedImage && (
         <img
           src={selectedImage}
           alt="Selected"
-          className="w-full h-full   object-cover"
-          style={{ display: "block" }} // Ensure the image is displayed as a block element
+          className="w-full h-full object-cover"
+          style={{ display: "block" }}
         />
       )}
     </div>
