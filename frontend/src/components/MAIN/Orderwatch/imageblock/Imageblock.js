@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import AOS from "aos";
 import "aos/dist/aos.css";
-
 const Imageblock = () => {
   const currentImage = useSelector((state) => state.image.currentImage);
   const currentWatch = useSelector((state) => state.watch.currentWatch);
