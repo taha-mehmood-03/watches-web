@@ -26,7 +26,7 @@ const Navbar = ({ handleClick }) => {
       navigate("./cart");
     } else {
       // If not logged in, redirect to login page
-      navigate("./login"); // Adjust this to your actual login page path
+      navigate("./"); // Adjust this to your actual login page path
     }
   };
 
