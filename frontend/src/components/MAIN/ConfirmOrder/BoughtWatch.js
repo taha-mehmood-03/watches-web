@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { Trash2 } from "lucide-react";
 
 const BoughtWatch = () => {
+  const [isLoading, setIsLoading] = React.useState(true);
   const [quantity, setQuantity] = React.useState({});
   const [total, setTotal] = React.useState(0);
   const dispatch = useDispatch();
@@ -67,7 +68,7 @@ const BoughtWatch = () => {
   }, [currentCartData, quantity]);
 
   useEffect(() => {
-    dispatch(getCartdata());
+    dispatch(getCartdata()).then(() => setIsLoading(false)); // Set loading false after fetching
   }, [dispatch]);
 
   useEffect(() => {
@@ -118,17 +119,21 @@ const BoughtWatch = () => {
             Your Cart
           </motion.h2>
 
-          <div className="space-y-4 ">
+          <div className="space-y-4">
             <AnimatePresence>
-              {currentCartData && currentCartData.map((watch, index) => (
-                <CartItem
-                  key={index}
-                  watch={watch}
-                  quantity={quantity[watch.name] || 1}
-                  handleQuantity={handleQuantity}
-                  deleteWatch={deleteWatch}
-                />
-              ))}
+              {isLoading ? (
+                <SkeletonLoader /> // Show skeleton loader while loading
+              ) : (
+                currentCartData && currentCartData.map((watch, index) => (
+                  <CartItem
+                    key={index}
+                    watch={watch}
+                    quantity={quantity[watch.name] || 1}
+                    handleQuantity={handleQuantity}
+                    deleteWatch={deleteWatch}
+                  />
+                ))
+              )}
             </AnimatePresence>
           </div>
 
@@ -167,7 +172,24 @@ const BoughtWatch = () => {
     </div>
   );
 };
-
+const SkeletonLoader = () => {
+  return (
+    <div className="space-y-4">
+      {[...Array(3)].map((_, index) => (
+        <div key={index} className="flex sm:items-center bg-gray-800/50 border border-gray-700 rounded-lg p-4 space-x-4 animate-pulse">
+          <div className="w-1/4 min-w-[80px] min-h-[80px] sm:min-w-[100px] sm:min-h-[100px] bg-gray-600 rounded-md" />
+          <div className="flex-grow space-y-2 max-w-[75%] sm:max-w-[80%]">
+            <div className="h-4 bg-gray-600 rounded w-2/3" />
+            <div className="flex items-center space-x-4">
+              <div className="w-16 h-6 bg-gray-600 rounded" />
+              <div className="w-24 h-6 bg-gray-600 rounded" />
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
 
 const CartItem = React.memo(({ watch, quantity, handleQuantity, deleteWatch }) => {
   const resolveImageSrc = () => {
