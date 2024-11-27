@@ -1,11 +1,14 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import imge from '../../../../../'
 
 const Image2block = () => {
   const currentWatch = useSelector((state) => state.watch.currentWatch);
 
   // Ensure currentWatch and currentWatch.images are defined before accessing the image
-  const imageSrc = currentWatch?.images?.[1] || "";
+  const imageSrc = currentWatch?.images?.[1]
+  ? require(`../../../../../public/images/${currentWatch.images[1]}`).default
+  : "";
 
   return (
     <div

@@ -11,7 +11,11 @@ const Imageblock = () => {
     AOS.init({ duration: 1200 });
   }, []);
 
-  const selectedImage = currentImage || (currentWatch.images.length > 0 ? currentWatch.images[0] : null);
+  const selectedImage = currentImage 
+  ? require(`../../../../../public/images/${currentImage}`).default 
+  : (currentWatch?.images?.length > 0 
+      ? require(`../../../../../public/images/${currentWatch.images[0]}`).default 
+      : null);
 
   return (
     <div
