@@ -1,6 +1,5 @@
 import React from "react";
 import { useSelector } from "react-redux";
-import imge from '../../../../../'
 
 const Image2block = () => {
   const currentWatch = useSelector((state) => state.watch.currentWatch);
