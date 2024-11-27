@@ -6,12 +6,27 @@ import {
   ShoppingBag, 
   User 
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import {  useSelector } from "react-redux";
 import Img1 from "./WDC-Email-Signature-400x50_300x.avif";
 
 const Navbar = ({ handleClick }) => {
+  const navigate = useNavigate();
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated); 
+
   const handleMenuClick = () => {
     if (window.matchMedia("(max-width: 1023px)").matches) {
       handleClick();
+    }
+  };
+
+  const handleCartClick = () => {
+    if (isAuthenticated) {
+      // If logged in, go to the cart page
+      navigate("./cart");
+    } else {
+      // If not logged in, redirect to login page
+      navigate("./login"); // Adjust this to your actual login page path
     }
   };
 
@@ -99,7 +114,7 @@ const Navbar = ({ handleClick }) => {
 
         {/* Cart Icon */}
         <motion.a 
-          href="./cart"
+          onClick={handleCartClick}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
         >
