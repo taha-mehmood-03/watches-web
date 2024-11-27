@@ -181,7 +181,7 @@ const BoughtWatch = () => {
       <div className="w-1/4 min-w-[80px] min-h-[80px] sm:min-w-[100px] sm:min-h-[100px]">
         <motion.img
           whileHover={{ scale: 1.05 }}
-          src={watch.images[0]}
+          src={require(`../../../../../public/images/${currentWatch.images[0]}`)}
           alt={watch.name}
           className="w-full h-auto object-contain rounded-md"
         />
