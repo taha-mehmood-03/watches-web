@@ -6,6 +6,7 @@ import api from "../../API/Api";
 import { useDebounce } from "use-debounce";
 import { useNavigate } from "react-router-dom";
 import { Trash2 } from "lucide-react";
+
 const BoughtWatch = () => {
   const [quantity, setQuantity] = React.useState({});
   const [total, setTotal] = React.useState(0);
@@ -168,7 +169,17 @@ const BoughtWatch = () => {
 };
 
 
-  const CartItem = React.memo(({ watch, quantity, handleQuantity, deleteWatch }) => (
+const CartItem = React.memo(({ watch, quantity, handleQuantity, deleteWatch }) => {
+  const resolveImageSrc = () => {
+    try {
+      return require(`../../../../public/images/${watch.images[0]}`);
+    } catch (error) {
+      console.error('Image load error:', error);
+      return null; // Fallback for image loading
+    }
+  };
+
+  return (
     <motion.div 
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
@@ -180,7 +191,7 @@ const BoughtWatch = () => {
       <div className="w-1/4 min-w-[80px] min-h-[80px] sm:min-w-[100px] sm:min-h-[100px]">
         <motion.img
           whileHover={{ scale: 1.05 }}
-          src={require(`../../../../public/images/${currentWatch.images[0]}`)}
+          src={resolveImageSrc()}
           alt={watch.name}
           className="w-full h-auto object-contain rounded-md"
         />
@@ -193,7 +204,7 @@ const BoughtWatch = () => {
         </h3>
         <div className="flex items-center space-x-4">
           {/* Quantity input */}
-          <div className="relative flex-grow max-w-16   sm:max-w-32">
+          <div className="relative flex-grow max-w-16 sm:max-w-32">
             <input
               type="number"
               value={quantity}
@@ -219,8 +230,8 @@ const BoughtWatch = () => {
         </div>
       </div>
     </motion.div>
-  ));
-  
+  );
+});
 
 
 export default BoughtWatch;
