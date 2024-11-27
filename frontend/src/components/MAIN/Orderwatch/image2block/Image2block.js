@@ -4,16 +4,12 @@ import { useSelector } from "react-redux";
 const Image2block = () => {
   const currentWatch = useSelector((state) => state.watch.currentWatch);
 
-  let imageSrc = "";
 
   // Dynamically require the image if `currentWatch.images` and the second image exist
-  try {
-    if (currentWatch?.images?.[1]) {
-      imageSrc = require(`../../../../../public/images/${currentWatch.images[1]}`).default;
-    }
-  } catch (error) {
-    console.error("Image not found or failed to load:", error);
-  }
+  
+   const   imageSrc = require(`../../../../../public/images/${currentWatch.images[1]}`);
+    
+ 
 
   return (
     <div
