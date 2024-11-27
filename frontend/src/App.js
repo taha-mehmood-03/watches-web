@@ -1,7 +1,7 @@
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Front from "./components/FRONTPAGE/Front";
-import Ordering from "./components/MAIN/Orderwatch.js/Ordering";
+import Ordering from "./components/MAIN/Orderwatch/Ordering";
 import Cart from "./components/MAIN/ConfirmOrder/Cart";
 import LoginPage from "./components/LOGIN/LoginPage";
 import SignPage from "./components/SIGNUPPAGE/SignPage";
