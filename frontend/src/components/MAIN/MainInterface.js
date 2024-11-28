@@ -12,12 +12,12 @@ const MainInterface = () => {
     
     >
       <div>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense >
           <Header />
         </Suspense>
       </div>
       <div>
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense >
           <Card />
         </Suspense>
       </div>
