@@ -5,12 +5,14 @@ import Imageblock from "./imageblock/Imageblock";
 import Moredetails from "./Details/Moredetails";
 import Image2block from "./image2block/Image2block";
 import Sideimages from "./Sidebarimages/Sideimages";
-import { setWatch } from "../../SIDEBAR-data/WatchManagement";
+import { setWatch, clearError } from "../../SIDEBAR-data/WatchManagement";
 import { useDispatch, useSelector } from "react-redux";
 import Footer from "../../Footer/Footer";
 import LazyLoad from 'react-lazyload';
 import AOS from "aos";
 import "aos/dist/aos.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Ordering = () => {
   useEffect(() => {
@@ -19,12 +21,20 @@ const Ordering = () => {
 
   const dispatch = useDispatch();
   const currentWatch = useSelector((state) => state.watch.currentWatch);
+  const error = useSelector((state) => state.watch.error);
 
   useEffect(() => {
     if (currentWatch) {
       dispatch(setWatch(currentWatch));
     }
   }, [dispatch, currentWatch]);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearError());
+    }
+  }, [error, dispatch]);
 
   return (
     <>
@@ -69,6 +79,7 @@ const Ordering = () => {
           <Footer />
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 };
