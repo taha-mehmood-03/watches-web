@@ -62,54 +62,83 @@ const Card = () => {
     (watch) => {
       console.log("Rendering images for watch:", watch.name);
       
-      const imageUrl = `/images/${watch.images[hoveredImage === watch.id ? 1 : 0]}`;
-  
-      return (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3 }}
-          className="relative w-full pt-[100%] overflow-hidden bg-gray-800 rounded-t-lg"
-        >
-          <motion.img
-            src={imageUrl}
-            alt={watch.name}
-            className="absolute top-0 left-0 w-full h-full object-contain"
-            onMouseEnter={() => handleImageEnter(watch.id)}
-            onMouseLeave={handleImageLeave}
-            loading="lazy"
-            layoutId={`watch-${watch.id}`}
-            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            onError={(e) => {
-              console.error(
-                "Image failed to load:",
-                watch.images[hoveredImage === watch.id ? 1 : 0]
-              );
-            }}
-          />
-          
+      // Use try-catch to handle potential image loading errors
+      try {
+        // Use the same require pattern that works in your Imageblock component
+        const imageUrl = require(`../../../../public/images/${
+          watch.images[hoveredImage === watch.id ? 1 : 0]
+        }`);
+        
+        return (
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: hoveredImage === watch.id ? 1 : 0 }}
-            className="absolute top-4 right-4 flex flex-col gap-2"
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            className="relative w-full pt-[100%] overflow-hidden bg-gray-800 rounded-t-lg"
           >
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className="p-2 bg-white rounded-full shadow-lg"
+            <motion.img
+              src={imageUrl}
+              alt={watch.name}
+              className="absolute top-0 left-0 w-full h-full object-contain"
+              onMouseEnter={() => handleImageEnter(watch.id)}
+              onMouseLeave={handleImageLeave}
+              loading="lazy"
+              layoutId={`watch-${watch.id}`}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              onError={(e) => {
+                console.error(
+                  "Image failed to load:",
+                  watch.images[hoveredImage === watch.id ? 1 : 0]
+                );
+                
+                // Try to load a fallback image
+                try {
+                  e.target.src = require(`../../../../public/images/fallback-watch.jpg`);
+                } catch {
+                  // If fallback also fails, use an empty data URI
+                  e.target.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'/%3E";
+                }
+              }}
+            />
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: hoveredImage === watch.id ? 1 : 0 }}
+              className="absolute top-4 right-4 flex flex-col gap-2"
             >
-              <Heart className="w-5 h-5 text-gray-700" />
-            </motion.button>
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              className="p-2 bg-white rounded-full shadow-lg"
-            >
-              <Eye className="w-5 h-5 text-gray-700" />
-            </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                className="p-2 bg-white rounded-full shadow-lg"
+              >
+                <Heart className="w-5 h-5 text-gray-700" />
+              </motion.button>
+              <motion.button
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                className="p-2 bg-white rounded-full shadow-lg"
+              >
+                <Eye className="w-5 h-5 text-gray-700" />
+              </motion.button>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      );
+        );
+      } catch (error) {
+        console.error("Error loading image:", error);
+        
+        // Return a fallback UI if image loading fails completely
+        return (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.3 }}
+            className="relative w-full pt-[100%] overflow-hidden bg-gray-800 rounded-t-lg"
+          >
+            <div className="absolute top-0 left-0 w-full h-full flex items-center justify-center text-gray-400">
+              Image not available
+            </div>
+          </motion.div>
+        );
+      }
     },
     [hoveredImage]
   );
