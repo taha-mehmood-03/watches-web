@@ -61,7 +61,7 @@ const Sideoverlay = ({ toggle, onClose }) => {
     <div>
       <nav
         id="sidenav-1"
-        className={`fixed top-[8%] lg:top-[14%] left-0 h-full w-80 bg-white transition-transform transform ${toggle ? 'translate-x-0 shadow-lg' : '-translate-x-96'} shadow-gray-600`}
+        className={`z-100 fixed top-[8%] lg:top-[14%] left-0 h-full w-80 bg-white transition-transform transform ${toggle ? 'translate-x-0 shadow-lg' : '-translate-x-96'} shadow-gray-600`}
       >
         <div className="flex justify-around gap-[12vw] items-center py-2 ">
           <div className="flex items-center">
