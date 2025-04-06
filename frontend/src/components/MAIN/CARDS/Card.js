@@ -61,9 +61,9 @@ const Card = () => {
   const renderWatchImage = useCallback(
     (watch) => {
       console.log("Rendering images for watch:", watch.name);
-      const imageUrl = require(`../../../../public/images/${
-        watch.images[hoveredImage === watch.id ? 1 : 0]
-      }`);
+      
+      const imageUrl = `/images/${watch.images[hoveredImage === watch.id ? 1 : 0]}`;
+  
       return (
         <motion.div
           initial={{ opacity: 0 }}
@@ -87,6 +87,7 @@ const Card = () => {
               );
             }}
           />
+          
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: hoveredImage === watch.id ? 1 : 0 }}
@@ -112,6 +113,7 @@ const Card = () => {
     },
     [hoveredImage]
   );
+  
 
   // Check if data is available
   if (!currentData || currentData.length === 0) {
